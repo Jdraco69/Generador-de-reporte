@@ -1,5 +1,6 @@
 import pandas as pd  
 import mysql.connector
+from Funcion_fecha import ingresar_fecha
 from mysql.connector import Error
 
 
@@ -12,8 +13,9 @@ def obtener_ventas_por_fecha():
             password="",
             database="proyecto_informe"
         )
-        global f_1, f_2 
+        
         fecha_inicio , fecha_fin = ingresar_fecha()
+        global f_1, f_2 
         f_1, f_2 = fecha_inicio, fecha_fin
         query = "SELECT id,nombre,tipo,precio,fecha FROM ventas Where fecha >= %s and fecha<= %s"  
         
@@ -30,24 +32,7 @@ def obtener_ventas_por_fecha():
         if 'connection' in locals() and connection.is_connected():
             connection.close()
             print("Conexión a la base de datos cerrada.")
-
-def ingresar_fecha():
-     v=True
-     while v==True:
-        
-      print("Ingrese la fecha en formato YYYY-MM-DD")
-      primera_fecha = input("Fecha de inicio: ")
-      segunda_fecha = input("Fecha de fin: ")
-    
-      if primera_fecha > segunda_fecha:
-          print("La fecha de inicio no puede ser posterior a la fecha de fin.")
-          v=False
-        
-      return primera_fecha, segunda_fecha
-        
-    
-  
-
+      
 if __name__ == "__main__":
     df = obtener_ventas_por_fecha()
     if df is not None:
