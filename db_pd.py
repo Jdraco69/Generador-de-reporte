@@ -1,10 +1,10 @@
 import pandas as pd  
 import mysql.connector
-from Funcion_fecha import ingresar_fecha
+from Funcion import ingresar_fecha , exportar_a_excel
 from mysql.connector import Error
 
 
-def obtener_ventas_por_fecha():
+def db_conneccion():
     try:
         connection = mysql.connector.connect(
             host='localhost',
@@ -33,8 +33,17 @@ def obtener_ventas_por_fecha():
             connection.close()
             print("Conexión a la base de datos cerrada.")
       
+
 if __name__ == "__main__":
-    df = obtener_ventas_por_fecha()
-    if df is not None:
-        df.to_excel(f"ventas_del_{f_1}_al_{f_2}.xlsx", index=False)
-        print("Datos exportados a ventas_por_fecha.xlsx")
+    df = db_conneccion()
+  
+    ARCHIVO_EXCEL = "ventas_excel.xlsx"
+  
+    # 2. Exportar a Excel
+    if  df  is not None:
+        if exportar_a_excel( df , ARCHIVO_EXCEL , f_1, f_2):
+            print("Proceso completado exitosamente")
+        else:
+            print("Hubo un problema al exportar los datos")
+    else:
+        print("No se obtuvieron datos de la base de datos")
